@@ -85,9 +85,11 @@ class StorageManager
         if ($this->eventSupport()) {
             Log::info('Uploaded事件触发,第一步，eventSupport:'.$this->eventSupport());
             $newResponse = event(new Uploaded($file, $response));
-            Log::info('Uploaded事件触发，第二步，newResponse:'.$newResponse);
+            $a1 = print_r($newResponse,true);
+            Log::info('Uploaded事件触发，第二步，newResponse:'.$a1 );
             $response = count($newResponse) > 0 ? $newResponse : $response;
-            Log::info('Uploaded事件触发，第三步，response:'.$response);
+            $a2 = print_r($response,true);
+            Log::info('Uploaded事件触发，第三步，response:'.$a2);
         }else{
             Log::info('Uploaded事件未触发，eventSupport:'.$this->eventSupport());
         }
