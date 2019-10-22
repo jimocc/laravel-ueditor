@@ -9,7 +9,7 @@ UEditor integration for Laravel 5.
 ## 安装
 
 ```shell
-$ composer require "overtrue/laravel-ueditor:~1.0"
+$ composer require "Jimocc/laravel-ueditor:~1.0"
 ```
 
 ## 配置
@@ -17,13 +17,13 @@ $ composer require "overtrue/laravel-ueditor:~1.0"
 1. 添加下面一行到 `config/app.php` 中 `providers` 部分：
 
     ```php
-    Overtrue\LaravelUEditor\UEditorServiceProvider::class,
+    Jimocc\LaravelUEditor\UEditorServiceProvider::class,
     ```
 
 2. 发布配置文件与资源
 
     ```php
-    $ php artisan vendor:publish --provider='Overtrue\LaravelUEditor\UEditorServiceProvider'
+    $ php artisan vendor:publish --provider='Jimocc\LaravelUEditor\UEditorServiceProvider'
     ```
 
 3. 模板引入编辑器
@@ -65,7 +65,7 @@ $ composer require "overtrue/laravel-ueditor:~1.0"
 
 如果你想使用七牛云储存，需要进行下面几个简单的操作：
 
-1.安装和配置 [laravel-filesystem-qiniu](https://github.com/overtrue/laravel-filesystem-qiniu)
+1.安装和配置 [laravel-filesystem-qiniu](https://github.com/Jimocc/laravel-filesystem-qiniu)
 
 2.配置 `config/ueditor.php` 的 `disk` 为 `qiniu`:
 
@@ -86,7 +86,7 @@ $ composer require "overtrue/laravel-ueditor:~1.0"
 
 ### 上传中事件
 
-> Overtrue\LaravelUEditor\Events\Uploading
+> Jimocc\LaravelUEditor\Events\Uploading
 
 在保存文件之前，你可以拿到一些信息：
 
@@ -98,7 +98,7 @@ $ composer require "overtrue/laravel-ueditor:~1.0"
 
 ### 上传完成事件
 
-> Overtrue\LaravelUEditor\Events\Uploaded
+> Jimocc\LaravelUEditor\Events\Uploaded
 
 它有两个属性：
 

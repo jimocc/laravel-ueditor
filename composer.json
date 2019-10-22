@@ -1,16 +1,16 @@
 {
-    "name": "overtrue/laravel-ueditor",
+    "name": "Jimocc/laravel-ueditor",
     "description": "UEditor integration for Laravel.",
     "license": "MIT",
     "authors": [
         {
-            "name": "overtrue",
+            "name": "Jimocc",
             "email": "anzhengchao@gmail.com"
         }
     ],
     "autoload": {
         "psr-4":{
-            "Overtrue\\LaravelUEditor\\":"src/"
+            "Jimocc\\LaravelUEditor\\":"src/"
         }
     },
     "suggest": {
@@ -22,7 +22,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Overtrue\\LaravelUEditor\\UEditorServiceProvider"
+                "Jimocc\\LaravelUEditor\\UEditorServiceProvider"
             ]
         }
     }

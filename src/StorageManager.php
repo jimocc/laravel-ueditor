@@ -1,22 +1,22 @@
 <?php
 
 /*
- * This file is part of the overtrue/laravel-ueditor.
+ * This file is part of the Jimocc/laravel-ueditor.
  *
- * (c) overtrue <i@overtrue.me>
+ * (c) Jimocc <i@Jimocc.me>
  *
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
 
-namespace Overtrue\LaravelUEditor;
+namespace Jimocc\LaravelUEditor;
 
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Overtrue\LaravelUEditor\Events\Uploaded;
-use Overtrue\LaravelUEditor\Events\Uploading;
-use Overtrue\LaravelUEditor\Events\Catched;
+use Jimocc\LaravelUEditor\Events\Uploaded;
+use Jimocc\LaravelUEditor\Events\Uploading;
+use Jimocc\LaravelUEditor\Events\Catched;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
@@ -81,7 +81,8 @@ class StorageManager
         ];
 
         if ($this->eventSupport()) {
-            event(new Uploaded($file, $response));
+            $newResponse = event(new Uploaded($file, $response));
+            $response = count($newResponse) > 0 ? $newResponse : $response;
         }
 
         return response()->json($response);
@@ -121,8 +122,8 @@ class StorageManager
         }
 
         $response = [
-            'state'=> count($list) ? 'SUCCESS':'ERROR',
-            'list'=> $list
+            'state' => count($list) ? 'SUCCESS' : 'ERROR',
+            'list' => $list
         ];
 
         return response()->json($response);
@@ -187,9 +188,9 @@ class StorageManager
      * List all files of dir.
      *
      * @param string $path
-     * @param int    $start
-     * @param int    $size
-     * @param array  $allowFiles
+     * @param int $start
+     * @param int $size
+     * @param array $allowFiles
      *
      * @return Response
      */
@@ -210,8 +211,8 @@ class StorageManager
      * Split results.
      *
      * @param array $files
-     * @param int   $start
-     * @param int   $size
+     * @param int $start
+     * @param int $size
      *
      * @return array
      */
@@ -229,7 +230,7 @@ class StorageManager
      * Store file.
      *
      * @param \Symfony\Component\HttpFoundation\File\UploadedFile $file
-     * @param string                                              $filename
+     * @param string $filename
      *
      * @return mixed
      */
@@ -242,7 +243,7 @@ class StorageManager
      * Store file from content.
      *
      * @param string
-     * @param string                                              $filename
+     * @param string $filename
      *
      * @return mixed
      */
@@ -255,7 +256,7 @@ class StorageManager
      * Validate the input file.
      *
      * @param \Symfony\Component\HttpFoundation\File\UploadedFile $file
-     * @param array                                               $config
+     * @param array $config
      *
      * @return bool|string
      */
@@ -268,7 +269,7 @@ class StorageManager
         } elseif ($file->getSize() > $config['max_size']) {
             $error = 'upload.ERROR_SIZE_EXCEED';
         } elseif (!empty($config['allow_files']) &&
-            !in_array('.'.$file->getClientOriginalExtension(), $config['allow_files'])) {
+            !in_array('.' . $file->getClientOriginalExtension(), $config['allow_files'])) {
             $error = 'upload.ERROR_TYPE_NOT_ALLOWED';
         }
 
@@ -279,15 +280,15 @@ class StorageManager
      * Get the new filename of file.
      *
      * @param \Symfony\Component\HttpFoundation\File\UploadedFile $file
-     * @param array                                               $config
+     * @param array $config
      *
      * @return string
      */
     protected function getFilename(UploadedFile $file, array $config)
     {
-        $ext = '.'.$file->getClientOriginalExtension();
+        $ext = '.' . $file->getClientOriginalExtension();
 
-        $filename = config('ueditor.hash_filename') ? md5($file->getFilename()).$ext : $file->getClientOriginalName();
+        $filename = config('ueditor.hash_filename') ? md5($file->getFilename()) . $ext : $file->getClientOriginalName();
 
         return $this->formatPath($config['path_format'], $filename);
     }
@@ -311,13 +312,13 @@ class StorageManager
         $config = [];
 
         foreach ($prefixes as $prefix) {
-            if ($action == $upload[$prefix.'ActionName']) {
+            if ($action == $upload[$prefix . 'ActionName']) {
                 $config = [
-                    'action' => array_get($upload, $prefix.'ActionName'),
-                    'field_name' => array_get($upload, $prefix.'FieldName'),
-                    'max_size' => array_get($upload, $prefix.'MaxSize'),
-                    'allow_files' => array_get($upload, $prefix.'AllowFiles', []),
-                    'path_format' => array_get($upload, $prefix.'PathFormat'),
+                    'action' => array_get($upload, $prefix . 'ActionName'),
+                    'field_name' => array_get($upload, $prefix . 'FieldName'),
+                    'max_size' => array_get($upload, $prefix . 'MaxSize'),
+                    'allow_files' => array_get($upload, $prefix . 'AllowFiles', []),
+                    'path_format' => array_get($upload, $prefix . 'PathFormat'),
                 ];
 
                 break;
@@ -360,7 +361,7 @@ class StorageManager
         }
 
         if (!str_contains($path, $filename)) {
-            $path = str_finish($path, '/').$filename;
+            $path = str_finish($path, '/') . $filename;
         }
 
         return $path;
