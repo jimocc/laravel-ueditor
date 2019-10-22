@@ -18,6 +18,8 @@ use Jimocc\LaravelUEditor\Events\Uploaded;
 use Jimocc\LaravelUEditor\Events\Uploading;
 use Jimocc\LaravelUEditor\Events\Catched;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Illuminate\Support\Facades\Log;
+
 
 /**
  * Class StorageManager.
@@ -81,8 +83,13 @@ class StorageManager
         ];
 
         if ($this->eventSupport()) {
+            Log::info('Uploaded事件触发,第一步，eventSupport:'.$this->eventSupport());
             $newResponse = event(new Uploaded($file, $response));
+            Log::info('Uploaded事件触发，第二步，newResponse:'.$newResponse);
             $response = count($newResponse) > 0 ? $newResponse : $response;
+            Log::info('Uploaded事件触发，第三步，response:'.$response);
+        }else{
+            Log::info('Uploaded事件未触发，eventSupport:'.$this->eventSupport());
         }
 
         return response()->json($response);
