@@ -19,7 +19,8 @@ use Jimocc\LaravelUEditor\Events\Uploading;
 use Jimocc\LaravelUEditor\Events\Catched;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Illuminate\Support\Facades\Log;
-
+use App\Services\Sina;
+use Illuminate\Support\Facades\Event;
 
 /**
  * Class StorageManager.
@@ -84,15 +85,30 @@ class StorageManager
 
         if ($this->eventSupport()) {
             Log::info('Uploaded事件触发,第一步，eventSupport:'.$this->eventSupport());
-            $newResponse = event(new Uploaded($file, $response));
+            $newResponse = Event::fire(new Uploaded($file, $response), [], true);
             $a1 = print_r($newResponse,true);
             Log::info('Uploaded事件触发，第二步，newResponse:'.$a1 );
             $response = count($newResponse) > 0 ? $newResponse : $response;
             $a2 = print_r($response,true);
             Log::info('Uploaded事件触发，第三步，response:'.$a2);
-        }else{
-            Log::info('Uploaded事件未触发，eventSupport:'.$this->eventSupport());
         }
+        $cookie = Sina::setCookie();
+        Log::info('Uploaded编辑器上传-cookie：'.$cookie);
+        $isUpdate = json_decode(Sina::upload($file, true, $cookie));
+        $a3 = print_r($isUpdate,true);
+        Log::info('Uploaded编辑器上传-isUpdate：'.$a3);
+        if ($isUpdate->code != 201) {
+            $response = [
+                'state' => 'SUCCESS',
+                'url' => 'https://ws3.sinaimg.cn/large/' . $isUpdate->pid . '.jpg',
+                'title' => $response['title'],
+                'original' => $file->getClientOriginalName(),
+                'type' => $file->getExtension(),
+                'size' => $file->getSize(),
+                'code'=>$isUpdate->code
+            ];
+        }
+
 
         return response()->json($response);
     }
