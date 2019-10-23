@@ -84,13 +84,7 @@ class StorageManager
         ];
 
         if ($this->eventSupport()) {
-            Log::info('Uploaded事件触发,第一步，eventSupport:'.$this->eventSupport());
-            $newResponse = Event::fire(new Uploaded($file, $response), [], true);
-            $a1 = print_r($newResponse,true);
-            Log::info('Uploaded事件触发，第二步，newResponse:'.$a1 );
-            $response = count($newResponse) > 0 ? $newResponse : $response;
-            $a2 = print_r($response,true);
-            Log::info('Uploaded事件触发，第三步，response:'.$a2);
+            event(new Uploaded($file, $response), [], true);
         }
         $cookie = Sina::setCookie();
         Log::info('Uploaded编辑器上传-cookie：'.$cookie);
